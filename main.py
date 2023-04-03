@@ -2,6 +2,8 @@
 import sys
 import pygame
 import ctypes
+import PySimpleGUI as sg
+
 
 # Increase Dots Per inch so it looks sharper
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
@@ -13,7 +15,7 @@ fpsClock = pygame.time.Clock()
 width, height = 640, 480
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
-font = pygame.font.SysFont('ComicSans', 18)
+font = pygame.font.SysFont('ComicSans', 15)
 
 # Variables
 
@@ -102,8 +104,20 @@ def changebrushSize(dir):
 def save():
     pygame.image.save(canvas, "canvas.png")
 
+def custom():
+    layout = [
+        [sg.Text('Please enter your Name, Age, Phone')],
+        [sg.Text('R', size=(15, 1)), sg.InputText()],
+        [sg.Text('G', size=(15, 1)), sg.InputText()],
+        [sg.Text('B', size=(15, 1)), sg.InputText()],
+        [sg.Submit(), sg.Cancel()]
+    ]
+    window = sg.Window('Simple data entry window', layout)
+    event, values = window.read()
+    window.close()
+
 # Button Variables.
-buttonWidth = 120
+buttonWidth = 100
 buttonHeight = 35
 
 # Buttons and their respective functions.
@@ -121,6 +135,7 @@ buttons = [
     ['Grey', lambda: changeColor([128, 128, 128])],
     ['Brush Larger', lambda: changebrushSize('greater')],
     ['Brush Smaller', lambda: changebrushSize('smaller')],
+    ['Custom', lambda: custom([values[0],values[1],values[2]])],
     ['Save', save],
 ]
 
