@@ -4,6 +4,12 @@ import pygame
 import ctypes
 import PySimpleGUI as sg
 
+#music
+from pygame import mixer
+mixer.init()
+mixer.music.load("SOC-instrumental.mp3") #song file must be in folder
+mixer.music.set_volume(0.7)
+mixer.music.play(loops=-1)
 
 # Increase Dots Per inch so it looks sharper
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
