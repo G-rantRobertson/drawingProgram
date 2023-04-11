@@ -106,15 +106,20 @@ def save():
 
 def custom():
     layout = [
-        [sg.Text('Please enter your Name, Age, Phone')],
+        [sg.Text('Please enter RGB')],
         [sg.Text('R', size=(15, 1)), sg.InputText()],
         [sg.Text('G', size=(15, 1)), sg.InputText()],
         [sg.Text('B', size=(15, 1)), sg.InputText()],
         [sg.Submit(), sg.Cancel()]
     ]
-    window = sg.Window('Simple data entry window', layout)
+    window = sg.Window('RGB input', layout)
     event, values = window.read()
+    r = event, values[0]
+    g = event, values[1]
+    b = event, values[2]
+    lambda: changeColor([r,g,b])
     window.close()
+
 
 # Button Variables.
 buttonWidth = 100
@@ -135,7 +140,7 @@ buttons = [
     ['Grey', lambda: changeColor([128, 128, 128])],
     ['Brush Larger', lambda: changebrushSize('greater')],
     ['Brush Smaller', lambda: changebrushSize('smaller')],
-    ['Custom', lambda: custom([values[0],values[1],values[2]])],
+    ['Custom', custom],
     ['Save', save],
 ]
 
