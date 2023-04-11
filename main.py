@@ -120,10 +120,8 @@ def custom():
     ]
     window = sg.Window('RGB input', layout)
     event, values = window.read()
-    r = event, values[0]
-    g = event, values[1]
-    b = event, values[2]
-    lambda: changeColor([r,g,b])
+    customColor = [event,values[0],values[2],values[3]]
+    lambda: changeColor([customColor])
     window.close()
 
 
