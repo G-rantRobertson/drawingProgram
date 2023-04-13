@@ -7,7 +7,7 @@ import PySimpleGUI as sg
 #music
 from pygame import mixer
 mixer.init()
-mixer.music.load("SOC-instrumental.mp3") #song file must be in folder
+mixer.music.load("DDLK.mp3.mp3") #song file must be in folder
 mixer.music.set_volume(0.7)
 mixer.music.play(loops=-1)
 
@@ -120,8 +120,7 @@ def custom():
     ]
     window = sg.Window('RGB input', layout)
     event, values = window.read()
-    customColor = [event,values[0],values[2],values[3]]
-    lambda: changeColor([customColor])
+    changeColor([int(values[0]), int(values[1]), int(values[2])])
     window.close()
 
 
@@ -144,7 +143,7 @@ buttons = [
     ['Grey', lambda: changeColor([128, 128, 128])],
     ['Brush Larger', lambda: changebrushSize('greater')],
     ['Brush Smaller', lambda: changebrushSize('smaller')],
-    ['Custom', custom],
+    ['Custom', lambda: custom()],
     ['Save', save],
 ]
 
@@ -188,8 +187,7 @@ while True:
             brushSize,
         )
     # Reference Dot
-    pygame.draw.circle(
-        screen,
+    pygame.draw.circle(        screen,
         drawColor,
         [100, 100],
         brushSize,
