@@ -3,6 +3,7 @@ import sys
 import pygame
 import ctypes
 import PySimpleGUI as sg
+import random
 
 #music
 from pygame import mixer
@@ -120,6 +121,23 @@ def custom():
     ]
     window = sg.Window('RGB input', layout)
     event, values = window.read()
+    #blank spaces
+    for i in range(len(values)):
+        if len(values[i]) == 0:
+            values[1] = 0
+    #if there is letters in the input
+    for i in range(len(values)):
+        for k in range(len(values[i])):
+            if values[i][k] == "a" or values[i][k] == "b" or values[i][k] == "c" or values[i][k] == "d" or values[i][k] == "e" or values[i][k] == "f" or values[i][k] == "g" or values[i][k] == "h" or values[i][k] == "i" or values[i][k] == "j" or values[i][k] == "k" or values[i][k] == "l" or values[i][k] == "m" or values[i][k] == "n" or values[i][k] == "o" or values[i][k] == "p" or values[i][k] == "q" or values[i][k] == "r" or values[i][k] == "s" or values[i][k] == "t" or values[i][k] == "u" or values[i][k] == "v" or values[i][k] == "w" or values[i][k] == "x" or values[i][k] == "y" or values[i][k] == "z":
+                values[i] = 0
+    #over 255
+    for i in range(len(values)):
+        if int(values[i]) > 255:
+            values[i] = 255
+    #less than 0
+    for i in range(len(values)):
+        if int(values[i]) < 0:
+            values[i] = 0
     changeColor([int(values[0]), int(values[1]), int(values[2])])
     window.close()
 
@@ -144,6 +162,7 @@ buttons = [
     ['Brush Larger', lambda: changebrushSize('greater')],
     ['Brush Smaller', lambda: changebrushSize('smaller')],
     ['Custom', lambda: custom()],
+    ['Random', lambda: changeColor([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)])],
     ['Save', save],
 ]
 
