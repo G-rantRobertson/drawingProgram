@@ -121,15 +121,18 @@ def custom():
     ]
     window = sg.Window('RGB input', layout)
     event, values = window.read()
+    
     #blank spaces
     for i in range(len(values)):
         if len(values[i]) == 0:
             values[1] = 0
+    Dict = {0 : "a", 1 : "b", 2 : "c", 3 : "d", 4 : "e", 5 : "f"}
     #if there is letters in the input
     for i in range(len(values)):
         for k in range(len(values[i])):
-            if values[i][k] == "a" or values[i][k] == "b" or values[i][k] == "c" or values[i][k] == "d" or values[i][k] == "e" or values[i][k] == "f" or values[i][k] == "g" or values[i][k] == "h" or values[i][k] == "i" or values[i][k] == "j" or values[i][k] == "k" or values[i][k] == "l" or values[i][k] == "m" or values[i][k] == "n" or values[i][k] == "o" or values[i][k] == "p" or values[i][k] == "q" or values[i][k] == "r" or values[i][k] == "s" or values[i][k] == "t" or values[i][k] == "u" or values[i][k] == "v" or values[i][k] == "w" or values[i][k] == "x" or values[i][k] == "y" or values[i][k] == "z":
-                values[i] = 0
+            for j in range(len(Dict)):
+                if values[i][k: k+1] == j:
+                    values[i] = 0
     #over 255
     for i in range(len(values)):
         if int(values[i]) > 255:
