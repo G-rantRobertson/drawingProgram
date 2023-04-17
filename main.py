@@ -5,12 +5,14 @@ import ctypes
 import PySimpleGUI as sg
 import random
 
-#music
+# music
 from pygame import mixer
+
 mixer.init()
-mixer.music.load("DDLK.mp3.mp3") #song file must be in folder
+mixer.music.load("DDLK.mp3.mp3")  # song file must be in folder
 mixer.music.set_volume(0.7)
 mixer.music.play(loops=-1)
+j = 1
 
 # Increase Dots Per inch so it looks sharper
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
@@ -38,6 +40,7 @@ brushSizeSteps = 3
 
 # Drawing Area Size
 canvasSize = [800, 800]
+
 
 # Button Class
 class Button():
@@ -86,8 +89,8 @@ class Button():
                 self.alreadyPressed = False
 
         self.buttonSurface.blit(self.buttonSurf, [
-            self.buttonRect.width/2 - self.buttonSurf.get_rect().width/2,
-            self.buttonRect.height/2 - self.buttonSurf.get_rect().height/2
+            self.buttonRect.width / 2 - self.buttonSurf.get_rect().width / 2,
+            self.buttonRect.height / 2 - self.buttonSurf.get_rect().height / 2
         ])
         screen.blit(self.buttonSurface, self.buttonRect)
 
@@ -99,6 +102,7 @@ def changeColor(color):
     global drawColor
     drawColor = color
 
+
 # Changing the Brush Size
 def changebrushSize(dir):
     global brushSize
@@ -107,9 +111,14 @@ def changebrushSize(dir):
     else:
         brushSize -= brushSizeSteps
 
+
 # Save the surface to the Disk
+
 def save():
-    pygame.image.save(canvas, "canvas.png")
+    global j
+    pygame.image.save(canvas, f"canvas{j}.png")
+    j += 1
+
 
 def custom():
     layout = [
@@ -121,23 +130,29 @@ def custom():
     ]
     window = sg.Window('RGB input', layout)
     event, values = window.read()
-    
-    #blank spaces
+
+    # blank spaces
     for i in range(len(values)):
-        if len(values[i]) == 0:
-            values[1] = 0
-    Dict = {0 : "a", 1 : "b", 2 : "c", 3 : "d", 4 : "e", 5 : "f"}
-    #if there is letters in the input
+        if values[i] == '':
+            values[i] = 0
+    dictionary = {}
+    for i in range(26):
+        dictionary[i] = chr(ord('a') + i)
+        dictionary[i + 26] = chr(ord('A') + i)
+    special_chars = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+    for i in range(len(special_chars)):
+        dictionary[i + 52] = special_chars[i]
+    # if there is letters in the input
     for i in range(len(values)):
-        for k in range(len(values[i])):
-            for j in range(len(Dict)):
-                if values[i][k: k+1] == j:
-                    values[i] = 0
-    #over 255
+        inp = str(values[i])
+        for j in range(len(dictionary)):
+            if inp.find(dictionary[j]) != -1:
+                values[i] = 0
+    # over 255
     for i in range(len(values)):
         if int(values[i]) > 255:
             values[i] = 255
-    #less than 0
+    # less than 0
     for i in range(len(values)):
         if int(values[i]) < 0:
             values[i] = 0
@@ -157,16 +172,16 @@ buttons = [
     ['Green', lambda: changeColor([0, 255, 0])],
     ['Red', lambda: changeColor([225, 0, 0])],
     ['Orange', lambda: changeColor([255, 165, 0])],
-    ['Yellow', lambda: changeColor([255,255,0])],
-    ['Purple', lambda: changeColor([128,0,128])],
-    ['Pink', lambda: changeColor([255,192,203])],
+    ['Yellow', lambda: changeColor([255, 255, 0])],
+    ['Purple', lambda: changeColor([128, 0, 128])],
+    ['Pink', lambda: changeColor([255, 192, 203])],
     ['Brown', lambda: changeColor([150, 75, 0])],
     ['Grey', lambda: changeColor([128, 128, 128])],
     ['Brush Larger', lambda: changebrushSize('greater')],
     ['Brush Smaller', lambda: changebrushSize('smaller')],
     ['Custom', lambda: custom()],
     ['Random', lambda: changeColor([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)])],
-    ['Save', save],
+    ['Save', save]
 ]
 
 # Making the buttons
@@ -195,13 +210,13 @@ while True:
         object.process()
     # Draw the Canvas at the center of the screen
     x, y = screen.get_size()
-    screen.blit(canvas, [x/2 - canvasSize[0]/2, y/2 - canvasSize[1]/2])
+    screen.blit(canvas, [x / 2 - canvasSize[0] / 2, y / 2 - canvasSize[1] / 2])
     # Drawing with the mouse
     if pygame.mouse.get_pressed()[0]:
         mx, my = pygame.mouse.get_pos()
         # Calculate Position on the Canvas
-        dx = mx - x/2 + canvasSize[0]/2
-        dy = my - y/2 + canvasSize[1]/2
+        dx = mx - x / 2 + canvasSize[0] / 2
+        dy = my - y / 2 + canvasSize[1] / 2
         pygame.draw.circle(
             canvas,
             drawColor,
@@ -209,11 +224,11 @@ while True:
             brushSize,
         )
     # Reference Dot
-    pygame.draw.circle(        screen,
-        drawColor,
-        [100, 100],
-        brushSize,
-    )
+    pygame.draw.circle(screen,
+                       drawColor,
+                       [100, 100],
+                       brushSize,
+                       )
 
     pygame.display.flip()
     fpsClock.tick(fps)
