@@ -159,6 +159,19 @@ def custom():
     changeColor([int(values[0]), int(values[1]), int(values[2])])
     window.close()
 
+def rainbow():
+    rVal = random.randint(0, 255)
+    gVal = random.randint(0, 255)
+    bVal = random.randint(0, 255)
+    while True:
+        rVal += random.randint(0, 255)
+        gVal += random.randint(0, 255)
+        bVal += random.randint(0, 255)
+        rVal -= random.randint(0, 255)
+        gVal -= random.randint(0, 255)
+        bVal -= random.randint(0, 255)
+        changeColor([rVal, gVal, bVal])
+        break
 
 # Button Variables.
 buttonWidth = 100
@@ -181,6 +194,7 @@ buttons = [
     ['Brush Smaller', lambda: changebrushSize('smaller')],
     ['Custom', lambda: custom()],
     ['Random', lambda: changeColor([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)])],
+    ['Rainbow', lambda: rainbow()],
     ['Save', save]
 ]
 
