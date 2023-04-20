@@ -23,13 +23,15 @@ fps = 300
 fpsClock = pygame.time.Clock()
 width, height = 640, 480
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-
+global rCheck
+rCheck = False
 font = pygame.font.SysFont('ComicSans', 15)
 
 # Variables
 
 # Our Buttons will append themselves to this list
 objects = []
+objectsBottomRow = []
 
 # Initial color
 drawColor = [0, 0, 0]
@@ -99,9 +101,14 @@ class Button():
 
 # Changing the Color
 def changeColor(color):
+    global rCheck
+    rCheck = False
     global drawColor
     drawColor = color
-
+#specific to the rainbow function
+def changeColor2(color):
+    global drawColor
+    drawColor = color
 
 # Changing the Brush Size
 def changebrushSize(dir):
@@ -111,15 +118,12 @@ def changebrushSize(dir):
     else:
         brushSize -= brushSizeSteps
 
-
-# Save the surface to the Disk
-
+# Save the surface to the computer
 def save():
     global j
     pygame.image.save(canvas, f"canvas{j}.png")
     j += 1
-
-
+#input custom RGB
 def custom():
     layout = [
         [sg.Text('Please enter RGB')],
@@ -158,23 +162,16 @@ def custom():
             values[i] = 0
     changeColor([int(values[0]), int(values[1]), int(values[2])])
     window.close()
-
+#rainbow brush
 def rainbow():
-    rVal = random.randint(0, 255)
-    gVal = random.randint(0, 255)
-    bVal = random.randint(0, 255)
-    while True:
-        rVal += random.randint(0, 255)
-        gVal += random.randint(0, 255)
-        bVal += random.randint(0, 255)
-        rVal -= random.randint(0, 255)
-        gVal -= random.randint(0, 255)
-        bVal -= random.randint(0, 255)
-        changeColor([rVal, gVal, bVal])
-        break
+    global rCheck
+    rCheck = True
+#clear the canvas to white
+def clear():
+    canvas.fill((255, 255, 255))
 
 # Button Variables.
-buttonWidth = 100
+buttonWidth = 102.5
 buttonHeight = 35
 
 # Buttons and their respective functions.
@@ -198,9 +195,17 @@ buttons = [
     ['Save', save]
 ]
 
+buttonsBottomRow = [
+    ['Clear', lambda: clear()]
+    ]
+
 # Making the buttons
 for index, buttonName in enumerate(buttons):
     Button(index * (buttonWidth + 10) + 10, 10, buttonWidth,
+           buttonHeight, buttonName[0], buttonName[1])
+
+for index, buttonName in enumerate(buttonsBottomRow):
+    Button(index * (buttonWidth + 10) + 10, 950, buttonWidth,
            buttonHeight, buttonName[0], buttonName[1])
 
 # Canvas
@@ -218,6 +223,12 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
+
+    if rCheck:
+        rVal = random.randint(0, 255)
+        gVal = random.randint(0, 255)
+        bVal = random.randint(0, 255)
+        changeColor2([rVal, gVal, bVal])
 
     # Drawing the Buttons
     for object in objects:
@@ -237,6 +248,7 @@ while True:
             [dx, dy],
             brushSize,
         )
+
     # Reference Dot
     pygame.draw.circle(screen,
                        drawColor,
