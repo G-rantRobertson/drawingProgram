@@ -5,6 +5,10 @@ import ctypes
 import PySimpleGUI as sg
 import random
 
+import win32api
+import win32con
+import win32gui
+
 # music
 from pygame import mixer
 
@@ -26,8 +30,18 @@ screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 global rCheck
 rCheck = False
 font = pygame.font.SysFont('ComicSans', 15)
+#grid configuration
+global gridOn
+gridOn = False
+transparentScreen = pygame.display.set_mode((width, height), pygame.RESIZABLE), use pygame.NOFRAME
+done = False
+fuchsia = (255, 0, 128)  # Transparency color
+black = (255, 255, 255)
+hwnd = pygame.display.get_wm_info()["window"]
+win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) | win32con.WS_EX_LAYERED)
+# Set window transparency color
+win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(*fuchsia), 0, win32con.LWA_COLORKEY)
 
-# Variables
 
 # Our Buttons will append themselves to this list
 objects = []
@@ -169,6 +183,12 @@ def rainbow():
 #clear the canvas to white
 def clear():
     canvas.fill((255, 255, 255))
+#make a grid on top of the canvas
+global gridOn
+if gridOn == True:
+    gridOn = False
+if gridOn = False:
+    gridOn = True
 
 # Button Variables.
 buttonWidth = 102.5
@@ -196,7 +216,8 @@ buttons = [
 ]
 
 buttonsBottomRow = [
-    ['Clear', lambda: clear()]
+    ['Clear', lambda: clear()],
+    ['grid', lambda: grid()],
     ]
 
 # Making the buttons
@@ -223,6 +244,11 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
+    if gridOn:
+        transparentScreen.fill(fuchsia)  # Transparent background
+        pygame.draw.rect(transparentScreen, black, pygame.Rect(30, 30, 60, 60))
+        pygame.display.update()
+
 
     if rCheck:
         rVal = random.randint(0, 255)
