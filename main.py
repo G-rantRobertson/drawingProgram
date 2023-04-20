@@ -100,7 +100,6 @@ class Button():
                 elif not self.alreadyPressed:
                     self.onclickFunction()
                     self.alreadyPressed = True
-
             else:
                 self.alreadyPressed = False
 
@@ -110,7 +109,6 @@ class Button():
         ])
         screen.blit(self.buttonSurface, self.buttonRect)
 
-
 # Handler Functions
 
 # Changing the Color
@@ -119,6 +117,7 @@ def changeColor(color):
     rCheck = False
     global drawColor
     drawColor = color
+    
 #specific to the rainbow function
 def changeColor2(color):
     global drawColor
@@ -137,6 +136,7 @@ def save():
     global j
     pygame.image.save(canvas, f"canvas{j}.png")
     j += 1
+    
 #input custom RGB
 def custom():
     layout = [
@@ -176,13 +176,16 @@ def custom():
             values[i] = 0
     changeColor([int(values[0]), int(values[1]), int(values[2])])
     window.close()
+    
 #rainbow brush
 def rainbow():
     global rCheck
     rCheck = True
+    
 #clear the canvas to white
 def clear():
     canvas.fill((255, 255, 255))
+    
 #make a grid on top of the canvas
 global gridOn
 if gridOn == True:
@@ -248,7 +251,6 @@ while True:
         transparentScreen.fill(fuchsia)  # Transparent background
         pygame.draw.rect(transparentScreen, black, pygame.Rect(30, 30, 60, 60))
         pygame.display.update()
-
 
     if rCheck:
         rVal = random.randint(0, 255)
