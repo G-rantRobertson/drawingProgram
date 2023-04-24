@@ -16,6 +16,7 @@ mixer.init()
 mixer.music.load("DDLK.mp3.mp3")  # song file must be in folder
 mixer.music.set_volume(0.7)
 mixer.music.play(loops=-1)
+
 j = 1
 
 # Increase Dots Per inch so it looks sharper
@@ -30,18 +31,13 @@ screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 global rCheck
 rCheck = False
 font = pygame.font.SysFont('ComicSans', 15)
-#grid configuration
-global gridOn
-gridOn = False
-transparentScreen = pygame.display.set_mode((width, height), pygame.RESIZABLE), use pygame.NOFRAME
+
 done = False
 fuchsia = (255, 0, 128)  # Transparency color
-black = (255, 255, 255)
+black = (0, 0, 0)
 hwnd = pygame.display.get_wm_info()["window"]
 win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) | win32con.WS_EX_LAYERED)
-# Set window transparency color
 win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(*fuchsia), 0, win32con.LWA_COLORKEY)
-
 
 # Our Buttons will append themselves to this list
 objects = []
@@ -109,6 +105,7 @@ class Button():
         ])
         screen.blit(self.buttonSurface, self.buttonRect)
 
+
 # Handler Functions
 
 # Changing the Color
@@ -117,11 +114,13 @@ def changeColor(color):
     rCheck = False
     global drawColor
     drawColor = color
-    
-#specific to the rainbow function
+
+
+# specific to the rainbow function
 def changeColor2(color):
     global drawColor
     drawColor = color
+
 
 # Changing the Brush Size
 def changebrushSize(dir):
@@ -131,13 +130,15 @@ def changebrushSize(dir):
     else:
         brushSize -= brushSizeSteps
 
+
 # Save the surface to the computer
 def save():
     global j
     pygame.image.save(canvas, f"canvas{j}.png")
     j += 1
-    
-#input custom RGB
+
+
+# input custom RGB
 def custom():
     layout = [
         [sg.Text('Please enter RGB')],
@@ -176,22 +177,27 @@ def custom():
             values[i] = 0
     changeColor([int(values[0]), int(values[1]), int(values[2])])
     window.close()
-    
-#rainbow brush
+
+
+# rainbow brush
 def rainbow():
     global rCheck
     rCheck = True
-    
-#clear the canvas to white
+
+
+# clear the canvas to white
 def clear():
     canvas.fill((255, 255, 255))
-    
-#make a grid on top of the canvas
-global gridOn
-if gridOn == True:
-    gridOn = False
-if gridOn = False:
-    gridOn = True
+
+
+# make a grid on top of the canvas
+def drawGrid():
+    blockSize = 50  # Set the size of the grid block
+    for x in range(800):
+        for y in range(800):
+            rect = pygame.Rect(x * blockSize, y * blockSize,
+                               blockSize, blockSize)
+            pygame.draw.rect(canvas, black, rect, 1)
 
 # Button Variables.
 buttonWidth = 102.5
@@ -219,9 +225,10 @@ buttons = [
 ]
 
 buttonsBottomRow = [
-    ['Clear', lambda: clear()],
-    ['grid', lambda: grid()],
-    ]
+    ['Clear Canvas', lambda: clear()],
+    ['Draw Grid', lambda: drawGrid()],
+    ['Clear', lambda: changeColor(fuchsia)]
+]
 
 # Making the buttons
 for index, buttonName in enumerate(buttons):
@@ -235,7 +242,6 @@ for index, buttonName in enumerate(buttonsBottomRow):
 # Canvas
 canvas = pygame.Surface(canvasSize)
 canvas.fill((255, 255, 255))
-
 # Game loop.
 while True:
     screen.fill((30, 30, 30))
@@ -247,10 +253,6 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-    if gridOn:
-        transparentScreen.fill(fuchsia)  # Transparent background
-        pygame.draw.rect(transparentScreen, black, pygame.Rect(30, 30, 60, 60))
-        pygame.display.update()
 
     if rCheck:
         rVal = random.randint(0, 255)
@@ -283,6 +285,6 @@ while True:
                        [100, 100],
                        brushSize,
                        )
-
+    pygame.display.update()
     pygame.display.flip()
     fpsClock.tick(fps)
