@@ -29,6 +29,8 @@ fpsClock = pygame.time.Clock()
 width, height = 640, 480
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 global rCheck
+global drawGridCheck
+drawGridCheck = False
 rCheck = False
 font = pygame.font.SysFont('ComicSans', 15)
 
@@ -189,15 +191,16 @@ def rainbow():
 def clear():
     canvas.fill((255, 255, 255))
 
+def darwGrid2():
+    pass
 
 # make a grid on top of the canvas
 def drawGrid():
-    blockSize = 50  # Set the size of the grid block
-    for x in range(800):
-        for y in range(800):
-            rect = pygame.Rect(x * blockSize, y * blockSize,
-                               blockSize, blockSize)
-            pygame.draw.rect(canvas, black, rect, 1)
+    global drawGridCheck
+    if drawGridCheck:
+        drawGridCheck = False
+    else:
+        drawGridCheck = True
 
 # Button Variables.
 buttonWidth = 102.5
@@ -285,6 +288,14 @@ while True:
                        [100, 100],
                        brushSize,
                        )
+    if drawGridCheck:
+        for x in range (560, 1360, 50):
+            rectangle1 = pygame.Rect(x, 100, 50, 800)
+            pygame.draw.rect(screen, black, rectangle1, 1)
+        for y in range (100, 900, 50):
+            rectangle1 = pygame.Rect(560, y, 800, 50)
+            pygame.draw.rect(screen, black, rectangle1, 1)
+
     pygame.display.update()
     pygame.display.flip()
     fpsClock.tick(fps)
